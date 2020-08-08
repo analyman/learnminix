@@ -293,9 +293,9 @@ ENTRY(kernel_call_entry_common)
 
 The above kernel call handler involves three C function `context_stop(struct proc* proc)`, `kernel_call` and `switch_to_user`.
 If multiple symetric processors has config and `proc != proc_addr(KERNEL)`(I think this will be always **true** in kernel call), 
-then `context_stop()` will call macro `BLK_LOCK()` prevent other processors access kernel code. 
+then `context_stop()` will call macro `BKL_LOCK()` prevent other processors access kernel code. 
 The `switch_to_user()` call `context_stop()` again with `proc = proc_addr(KERNEL)`, and this `context_sotp()` function call 
-call `BLK_UNLOCK()` macro which will relieve a processor from spinlock busy waiting if there are processors waiting.
+call `BKL_UNLOCK()` macro which will relieve a processor from spinlock busy waiting if there are processors waiting.
 
 So the actual work of kernel call will be performed by `kernel_call()` function in `system.c`, it dispatch message to correspond
 kernel call handler as states above.
